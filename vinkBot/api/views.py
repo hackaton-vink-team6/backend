@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from rest_framework.generics import CreateAPIView
+from rest_framework.viewsets import GenericViewSet
 
-# Create your views here.
+class AnswerQuestionView(CreateAPIView, GenericViewSet):
+    pass
