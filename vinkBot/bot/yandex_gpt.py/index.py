@@ -1,6 +1,9 @@
 import requests
 import json
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def gpt(auth_headers):
@@ -23,12 +26,12 @@ def gpt(auth_headers):
 
 if __name__ == "__main__":
 
-    if os.getenv('API_KEY') is not None:
-        yandex_api_key = os.environ['YANDEX_API_KEY']
-        folder_id = os.environ['FOLDER_ID']
+    if os.getenv('YANDEX_API_KEY') is not None:
+        yandex_api_key = os.getenv('YANDEX_API_KEY')
+        folder_id = os.getenv('FOLDER_ID')
         headers = {
-            'Authorization': f'Api-Key {api_key}',
-            "x-folder-id": folder_id
+            'Authorization': f'Api-Key {yandex_api_key}',
+            # "x-folder-id": folder_id,
         }
     else:
         print ('Please save either an IAM token or an API key into a corresponding `IAM_TOKEN` or `API_KEY` environment variable.')
