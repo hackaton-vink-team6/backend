@@ -19,6 +19,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'api.apps.ApiConfig',
     'bot.apps.BotConfig',
     'django.contrib.admin',
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
+
 ]
 
 MIDDLEWARE = [
@@ -59,8 +62,9 @@ TEMPLATES = [
     },
 ]
 
+import bot.routing
 WSGI_APPLICATION = 'vinkBot.wsgi.application'
-
+ASGI_APPLICATION = "vinkBot.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -71,6 +75,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Django Channels
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [config("REDIS_BACKEND")],
+#         },
+#     },
+# }
 
 
 # Password validation
