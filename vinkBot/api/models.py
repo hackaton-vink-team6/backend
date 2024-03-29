@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Profile(models.Model):
+    chat_id = models.PositiveIntegerField()
     name = models.TextField(verbose_name='Имя пользователя')
 
     class Meta:
