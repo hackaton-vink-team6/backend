@@ -7,8 +7,9 @@ from telegram import Bot, Update
 from telegram.ext import Updater, Filters, CallbackContext, MessageHandler, CommandHandler
 from telegram.utils.request import Request
 
+from .maim import start
 
-from api.models import Question, Profile
+from api.models import Question, Profile, Answer
 
 TOKEN='6917372678:AAFC89KdLfU0mj9E-M7hlhRtrgXYPMpaGuA'
 PROXY_URL=os.getenv('')
@@ -29,7 +30,7 @@ def log_errors(f):
 @log_errors
 def do_echo(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
-    text = update.message.text
+    text_question = update.message.text
 
     p, _ = Profile.objects.get_or_create(
         chat_id=chat_id,
@@ -39,10 +40,18 @@ def do_echo(update: Update, context: CallbackContext):
     )
     Question(
         profile=p,
-        text_question=text,
+        text_question=text_question,
     ).save()
 
-    reply_text = f'{chat_id} and {text}'
+    answer = start(text_question)
+
+    Answer(
+        profile=p,
+        text_question=text_question,
+        text_answer=answer
+    ).save()
+
+    reply_text = f'{answer}'
     update.message.reply_text(text=reply_text)
 
 

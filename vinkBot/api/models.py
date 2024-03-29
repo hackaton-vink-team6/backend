@@ -32,7 +32,7 @@ class Answer(Question):
     )
 
     def __str__(self):
-        return self.text_answer
+        return self.text_question[15:]
 
     class Meta:
         verbose_name = 'Сообщение от бота'

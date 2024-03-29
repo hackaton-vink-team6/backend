@@ -3,6 +3,21 @@ import json
 import os
 
 
+def start():
+    if os.getenv('YANDEX_API_KEY') is not None:
+        yandex_api_key = os.getenv('YANDEX_API_KEY')
+        folder_id = os.getenv('FOLDER_ID')
+        headers = {
+            'Authorization': f'Api-Key {yandex_api_key}',
+            # "x-folder-id": folder_id,
+        }
+        return (gpt(headers))
+    else:
+        print ('Please save either an IAM token or an API key into a corresponding `IAM_TOKEN` or `API_KEY` environment variable.')
+        exit()
+
+
+
 def gpt(auth_headers):
 
     url = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion'
