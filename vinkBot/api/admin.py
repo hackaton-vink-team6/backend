@@ -1,8 +1,15 @@
 from django.contrib import admin
 
-from .models import Message
+from .models import Profile, Answer, Question
 
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'text_answer')
 
-@admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'answer', 'question', 'created_at', 'is_liked')
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'text_question', 'profile', 'created_at')
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
