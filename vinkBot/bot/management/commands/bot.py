@@ -8,6 +8,7 @@ from telegram.ext import Updater, Filters, CallbackContext, MessageHandler, Comm
 from telegram.utils.request import Request
 
 from .maim import start
+from bot.yandex_gpt.index import get_gpt_response
 
 from api.models import Question, Profile, Answer
 
@@ -43,7 +44,7 @@ def do_echo(update: Update, context: CallbackContext):
         text_question=text_question,
     ).save()
 
-    answer = start(text_question)
+    answer = get_gpt_response(text_question)
 
     Answer(
         profile=p,
