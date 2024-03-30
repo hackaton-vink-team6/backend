@@ -7,7 +7,6 @@ from telegram import Bot, Update
 from telegram.ext import Updater, Filters, CallbackContext, MessageHandler, CommandHandler
 from telegram.utils.request import Request
 
-from .maim import start
 from bot.yandex_gpt.index import get_gpt_response
 
 from api.models import Question, Profile, Answer
