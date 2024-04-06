@@ -1,7 +1,6 @@
+from api.views import AnswerQuestionView
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
-from api.views import (AnswerQuestionView)
 
 app_name = 'api'
 router_v1 = DefaultRouter()

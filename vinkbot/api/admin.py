@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Profile, Answer, Question
+from .models import Answer, Profile, Question
+
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):

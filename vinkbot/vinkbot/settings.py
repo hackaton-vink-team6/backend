@@ -1,5 +1,10 @@
+import os
 from pathlib import Path
+
 import environ
+from dotenv import load_dotenv
+
+load_dotenv()
 env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +19,7 @@ SECRET_KEY = 'django-insecure-$g=es1=$ne&zpviv$&rnc2+91xqrk&5-@no&bjqtfq9c&81*=(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'vinkBot.urls'
+ROOT_URLCONF = 'vinkbot.urls'
 
 TEMPLATES = [
     {
@@ -60,22 +65,31 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'vinkBot.wsgi.application'
+WSGI_APPLICATION = 'vinkbot.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv(
+                "DB_ENGINE", default="django.db.backends.postgresql"
+            ),
+            "NAME": os.getenv("DB_NAME", default="postgres"),
+            "USER": os.getenv("POSTGRES_USER", default="postgres"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="postgres"),
+            "HOST": os.getenv("DB_HOST", default="db"),
+            "PORT": os.getenv("DB_PORT", default="5432"),
+        }
+    }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -96,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -118,3 +132,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='')
 TELEGRAM_LOG = env.str('TELEGRAM_LOG', default='/web/logs/bot.log')
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://94.241.139.139",
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_SSL = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
+EMAIL_HOST_PASSWORD = os.getenv('APP_PASSWORD')

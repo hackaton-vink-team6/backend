@@ -1,10 +1,11 @@
+from rest_framework import permissions, status
 from rest_framework.generics import CreateAPIView
-from rest_framework.viewsets import GenericViewSet
-from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import QuestionSerializers
+from rest_framework.viewsets import GenericViewSet
+
 from .models import Answer, Question
+from .serializers import QuestionSerializers
+
 
 class AnswerQuestionView(CreateAPIView, GenericViewSet):
     queryset = Question.objects.all()

@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Answer, Question
-#from bot.validators import validate_is_profane_russian
+
+from .models import Question
 
 
 class QuestionSerializers(serializers.ModelSerializer):
