@@ -1,18 +1,18 @@
 import os
 
-from typing import Any
+from django.conf import settings
+from django.core.mail import send_mail
+from api.models import Answer, Profile, Question
+from bot.yandex_gpt.main import start
 from django.core.management.base import BaseCommand
-
 from telegram import Bot, Update
-from telegram.ext import Updater, Filters, CallbackContext, MessageHandler, CommandHandler
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, Updater)
 from telegram.utils.request import Request
 
-from bot.yandex_gpt.index import get_gpt_response
+TOKEN = os.getenv('TELEGRAM_TOKEN')
+PROXY_URL = os.getenv('')
 
-from api.models import Question, Profile, Answer
-
-TOKEN='6917372678:AAFC89KdLfU0mj9E-M7hlhRtrgXYPMpaGuA'
-PROXY_URL=os.getenv('')
 
 def log_errors(f):
 
@@ -23,7 +23,7 @@ def log_errors(f):
             error_message = f'Ошибка: {e}'
             print(error_message)
             raise e
-    
+
     return inner
 
 
@@ -43,16 +43,28 @@ def do_echo(update: Update, context: CallbackContext):
         text_question=text_question,
     ).save()
 
-    answer = get_gpt_response(text_question)
+    if text_question=='Прошу человека':
+        answer = None
+        send_mail('vink', f'{chat_id} просит помощи.',
+            settings.EMAIL_HOST_USER,  
+            [settings.EMAIL_HOST_USER],
+        ) 
+    else:
+        answer = start(text_question)
 
-    Answer(
-        profile=p,
-        text_question=text_question,
-        text_answer=answer
-    ).save()
+    if answer:
+        Answer(
+            profile=p,
+            text_question=text_question,
+            text_answer=answer
+        ).save()
 
-    reply_text = f'{answer}'
-    update.message.reply_text(text=reply_text)
+        reply_text = f'{answer}'
+        update.message.reply_text(text=reply_text)
+
+    else:
+        update.message.reply_text(
+            'Подождите, через несколько минут подключится другой специалист')
 
 
 @log_errors
@@ -75,13 +87,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         request = Request(
-            connect_timeout=5.5,
-            read_timeout=5.0,
+            connect_timeout=25.5,
+            read_timeout=25.0,
         )
         bot = Bot(
             request=request,
             token=TOKEN,
-            ########base_url=PROXY_URL,
         )
         print(bot.get_me())
 
