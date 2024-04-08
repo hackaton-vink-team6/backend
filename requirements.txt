@@ -19,7 +19,9 @@ django-json-widget==2.0.1
 djangorestframework==3.15.0
 drf-yasg==1.21.7
 exceptiongroup==1.2.0
+flake8==7.0.0
 future==1.0.0
+gunicorn==21.2.0
 h11==0.14.0
 httpcore==1.0.4
 httpx==0.27.0
@@ -27,10 +29,15 @@ hyperlink==21.0.0
 idna==3.6
 incremental==22.10.0
 inflection==0.5.1
+isort==5.13.2
+mccabe==0.7.0
 packaging==24.0
+psycopg2-binary==2.9.9
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
+pycodestyle==2.11.1
 pycparser==2.21
+pyflakes==3.2.0
 pyOpenSSL==24.1.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
