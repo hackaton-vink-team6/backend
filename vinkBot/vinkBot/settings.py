@@ -1,15 +1,15 @@
-import os
 from pathlib import Path
-
-import environ
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
+import environ
 env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-$g=es1=$ne&zpviv$&rnc2+91xqrk&5-@no&bjqtfq9c&81*=('
+SECRET_KEY = os.getenv(SECRET_KEY)
 
 DEBUG = True
 
@@ -60,9 +60,8 @@ TEMPLATES = [
     },
 ]
 
-import bot.routing
-WSGI_APPLICATION = 'vinkBot.wsgi.application'
 ASGI_APPLICATION = "vinkBot.asgi.application"
+WSGI_APPLICATION = 'vinkBot.wsgi.application'
 
 
 if DEBUG:
@@ -88,7 +87,10 @@ else:
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
 
@@ -117,12 +119,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 STATIC_URL = 'static/'
 
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='')
 TELEGRAM_LOG = env.str('TELEGRAM_LOG', default='/web/logs/bot.log')
