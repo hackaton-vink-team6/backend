@@ -3,8 +3,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-# import environ
-# env = environ.Env()
+
+import environ
+env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -15,8 +16,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'daphne',
@@ -101,7 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -114,5 +113,17 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='')
-# TELEGRAM_LOG = env.str('TELEGRAM_LOG', default='/web/logs/bot.log')
+STATIC_URL = 'static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='')
+TELEGRAM_LOG = env.str('TELEGRAM_LOG', default='/web/logs/bot.log')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_SSL = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
+EMAIL_HOST_PASSWORD = os.getenv('APP_PASSWORD')
